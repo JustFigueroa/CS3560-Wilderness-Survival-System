@@ -45,12 +45,12 @@ GameObject:
   - component: {fileID: 7937525706643456130}
   - component: {fileID: 973034944501487673}
   m_Layer: 7
-  m_Name: CostWaterToken
+  m_Name: CostWaterToken2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7937525706643456130
 Transform:
   m_ObjectHideFlags: 0
@@ -142,7 +142,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6997872603600532272
 Transform:
   m_ObjectHideFlags: 0
@@ -263,12 +263,12 @@ GameObject:
   - component: {fileID: 2072243425526536475}
   - component: {fileID: 8260929439113901615}
   m_Layer: 7
-  m_Name: AvailableFoodToken
+  m_Name: AvailableFoodToken3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2072243425526536475
 Transform:
   m_ObjectHideFlags: 0
@@ -355,12 +355,12 @@ GameObject:
   - component: {fileID: 4003149688433637840}
   - component: {fileID: 1107870956964839360}
   m_Layer: 7
-  m_Name: AvailableGoldToken
+  m_Name: AvailableGoldToken3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4003149688433637840
 Transform:
   m_ObjectHideFlags: 0
@@ -447,12 +447,12 @@ GameObject:
   - component: {fileID: 6541574308146691097}
   - component: {fileID: 2526940803666499846}
   m_Layer: 7
-  m_Name: AvailableWaterToken
+  m_Name: AvailableWaterToken2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6541574308146691097
 Transform:
   m_ObjectHideFlags: 0
@@ -573,12 +573,12 @@ GameObject:
   - component: {fileID: 7347624443003638102}
   - component: {fileID: 7994917337261892290}
   m_Layer: 7
-  m_Name: CostWaterToken
+  m_Name: CostWaterToken3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7347624443003638102
 Transform:
   m_ObjectHideFlags: 0
@@ -665,12 +665,12 @@ GameObject:
   - component: {fileID: 1302220607955087369}
   - component: {fileID: 7827411252818781981}
   m_Layer: 7
-  m_Name: CostFoodToken
+  m_Name: CostFoodToken3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1302220607955087369
 Transform:
   m_ObjectHideFlags: 0
@@ -756,6 +756,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2218204529851556249}
   - component: {fileID: 1700902568084996207}
+  - component: {fileID: 3888468658831500139}
   m_Layer: 6
   m_Name: SwampTile
   m_TagString: Untagged
@@ -843,6 +844,43 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!114 &3888468658831500139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712135122114779124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a613b71feb464591b04dbec0ded7da3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileData
+  availableFoodTokens:
+  - {fileID: 6618479406839154008}
+  - {fileID: 8879230713750882493}
+  - {fileID: 4254632108584767075}
+  availableWaterTokens:
+  - {fileID: 8484666697935769665}
+  - {fileID: 4415313168961581456}
+  - {fileID: 5949824939371818877}
+  availableGoldTokens:
+  - {fileID: 9137072171464744681}
+  - {fileID: 8863617724806586792}
+  - {fileID: 4316045166957190790}
+  costFoodTokens:
+  - {fileID: 3226075828782201652}
+  - {fileID: 8639122071845174207}
+  - {fileID: 4494808373945972969}
+  costWaterTokens:
+  - {fileID: 7586410298657811980}
+  - {fileID: 2741840891254416951}
+  - {fileID: 4428981624803375022}
+  availableFoodAmount: 0
+  availableWaterAmount: 0
+  availableGoldAmount: 0
+  costFoodAmount: 0
+  costWaterAmount: 0
 --- !u!1 &5949824939371818877
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,12 +892,12 @@ GameObject:
   - component: {fileID: 7766416941973277720}
   - component: {fileID: 4109030191791721194}
   m_Layer: 7
-  m_Name: AvailableWaterToken
+  m_Name: AvailableWaterToken3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7766416941973277720
 Transform:
   m_ObjectHideFlags: 0
@@ -951,7 +989,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7766771429661120511
 Transform:
   m_ObjectHideFlags: 0
@@ -1077,7 +1115,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5808078563086394521
 Transform:
   m_ObjectHideFlags: 0
@@ -1203,7 +1241,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2110289890389956050
 Transform:
   m_ObjectHideFlags: 0
@@ -1290,12 +1328,12 @@ GameObject:
   - component: {fileID: 6796663920200891192}
   - component: {fileID: 7522864065341183794}
   m_Layer: 7
-  m_Name: CostFoodToken
+  m_Name: CostFoodToken2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6796663920200891192
 Transform:
   m_ObjectHideFlags: 0
@@ -1382,12 +1420,12 @@ GameObject:
   - component: {fileID: 352707374578826914}
   - component: {fileID: 9165222891642894662}
   m_Layer: 7
-  m_Name: AvailableGoldToken
+  m_Name: AvailableGoldToken2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &352707374578826914
 Transform:
   m_ObjectHideFlags: 0
@@ -1474,12 +1512,12 @@ GameObject:
   - component: {fileID: 6938329408199718010}
   - component: {fileID: 5728919510543717724}
   m_Layer: 7
-  m_Name: AvailableFoodToken
+  m_Name: AvailableFoodToken2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6938329408199718010
 Transform:
   m_ObjectHideFlags: 0
@@ -1571,7 +1609,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6277401737537078758
 Transform:
   m_ObjectHideFlags: 0
