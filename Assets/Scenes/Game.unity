@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -256,6 +257,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24df6aa28e904a60b95d71974ab2b37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoardCamera
+  boardManager: {fileID: 1961532738}
+  overviewDuration: 3
+  boardPadding: 2
+  playerZoom: 6
+  zoomDuration: 2
+  followSpeed: 5
 --- !u!1 &1778198400
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +340,12 @@ MonoBehaviour:
   - {fileID: 9151219240906466965, guid: a7b433a1d17474566956ffab38ed326d, type: 3}
   - {fileID: 5122855133724433963, guid: ea22fa1f4a81d42149e49f4b0eefe108, type: 3}
   - {fileID: 4712135122114779124, guid: b04e9b7686e8048c1ad8ffce9d00b59b, type: 3}
+  playerPrefab: {fileID: 480070386905949344, guid: 5c0d0d478ed7545cfa0118710d11264e, type: 3}
+  playerParent: {fileID: 0}
+  playerYPosition: 1
   boardParent: {fileID: 1778198401}
+  tileWidth: 5.11
+  tileHeight: 5.11
 --- !u!4 &1961532739
 Transform:
   m_ObjectHideFlags: 0

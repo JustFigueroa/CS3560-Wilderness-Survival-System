@@ -4,9 +4,18 @@ public class BoardManager : MonoBehaviour
 {
     [Header("Tile Prefabs")]
     public GameObject[] tilePrefabs;
+    
+    [Header("Player")]
+    public GameObject playerPrefab;
+    public Transform playerParent;
+    public float playerYPosition = 1f;
 
     [Header("Board Organization")]
     public Transform boardParent;
+
+    public int BoardWidth { get; private set; }
+    public int BoardHeight { get; private set; }
+    private GameObject spawnedPlayer;
 
     //Do not change pls
     [Header("Tile Size")]
@@ -41,6 +50,10 @@ public class BoardManager : MonoBehaviour
             settings.boardWidth,
             settings.boardHeight
         );
+        SpawnPlayer(settings.boardHeight);
+        BoardWidth = settings.boardWidth;
+        BoardHeight = settings.boardHeight;
+
     }
 
     private void SpawnBoard(int width, int height)
@@ -83,6 +96,41 @@ public class BoardManager : MonoBehaviour
 
                 tileData.GenerateResources();
             }
+        }
+    }
+        private void SpawnPlayer(int boardHeight)
+    {
+        if (playerPrefab == null)
+        {
+            Debug.LogError("Player prefab has not been assigned.");
+            return;
+        }
+
+        int randomY = Random.Range(0, boardHeight);
+
+        Vector3 playerPosition = new Vector3(
+            .5f,
+            randomY * tileHeight + playerYPosition,
+            -.1f
+        );
+
+        spawnedPlayer = Instantiate(
+            playerPrefab,
+            playerPosition,
+            Quaternion.identity,
+            playerParent
+);
+    }
+    public Transform PlayerTransform
+    {
+        get
+        {
+            if (spawnedPlayer == null)
+            {
+                return null;
+            }
+
+            return spawnedPlayer.transform;
         }
     }
 }
