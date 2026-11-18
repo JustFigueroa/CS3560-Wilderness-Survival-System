@@ -270,7 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoardCamera
   boardManager: {fileID: 1961532738}
-  overviewDuration: 3
+  overviewDuration: 1.5
   boardPadding: 2
   playerZoom: 6
   zoomDuration: 2

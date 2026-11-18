@@ -1,10 +1,11 @@
 using UnityEngine;
 
+// Creates the board, stores each tile's data, and places the player.
 public class BoardManager : MonoBehaviour
 {
     [Header("Tile Prefabs")]
     public GameObject[] tilePrefabs;
-    
+
     [Header("Player")]
     public GameObject playerPrefab;
     public Transform playerParent;
@@ -13,15 +14,35 @@ public class BoardManager : MonoBehaviour
     [Header("Board Organization")]
     public Transform boardParent;
 
-    public int BoardWidth { get; private set; }
-    public int BoardHeight { get; private set; }
-    private GameObject spawnedPlayer;
-
-    //Do not change pls
     [Header("Tile Size")]
     public float tileWidth = 5.11f;
     public float tileHeight = 5.11f;
 
+    public int BoardWidth { get; private set; }
+    public int BoardHeight { get; private set; }
+
+    // Stores tile data using the tile's grid coordinates:
+    // tileDataGrid[x, y]
+    private TileData[,] tileDataGrid;
+
+    // Reference to the player created by this manager.
+    private GameObject spawnedPlayer;
+
+    // Allows other scripts, such as BoardCamera, to access the spawned player.
+    public Transform PlayerTransform
+    {
+        get
+        {
+            if (spawnedPlayer == null)
+            {
+                return null;
+            }
+
+            return spawnedPlayer.transform;
+        }
+    }
+
+    // Initializes the board using the settings created by GameManager.
     private void Start()
     {
         if (GameManager.Instance == null)
@@ -44,42 +65,37 @@ public class BoardManager : MonoBehaviour
 
         GameSettings settings = GameManager.Instance.settings;
 
-        Random.InitState(settings.seed);
-
-        SpawnBoard(
-            settings.boardWidth,
-            settings.boardHeight
-        );
-        SpawnPlayer(settings.boardHeight);
         BoardWidth = settings.boardWidth;
         BoardHeight = settings.boardHeight;
 
+        // Using the game seed makes the board generation repeatable for the
+        // same game settings.
+        Random.InitState(settings.seed);
+
+        SpawnBoard(BoardWidth, BoardHeight);
+        SpawnPlayer(BoardHeight);
     }
 
+    // Creates every tile, generates its resources, and stores its TileData in
+    // the grid so the player and other systems can query it later.
     private void SpawnBoard(int width, int height)
     {
+        tileDataGrid = new TileData[width, height];
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                int randomTileIndex =
-                    Random.Range(0, tilePrefabs.Length);
+                // Choose one of the available biome/tile prefabs.
+                int randomTileIndex = Random.Range(0, tilePrefabs.Length);
 
                 GameObject tilePrefab =
                     tilePrefabs[randomTileIndex];
 
-                Vector3 spawnPosition = new Vector3(
-                    x * tileWidth,
-                    y * tileHeight,
-                    0f
-                );
+                Vector3 spawnPosition = new Vector3(x * tileWidth, y * tileHeight, 0f);
 
-                GameObject spawnedTile = Instantiate(
-                    tilePrefab,
-                    spawnPosition,
-                    Quaternion.identity,
-                    boardParent
-                );
+                // Create the tile at its grid-based world position.
+                GameObject spawnedTile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity, boardParent);
 
                 TileData tileData =
                     spawnedTile.GetComponent<TileData>();
@@ -87,18 +103,25 @@ public class BoardManager : MonoBehaviour
                 if (tileData == null)
                 {
                     Debug.LogError(
-                        "Tile prefab is missing the TileData component.",
+                        "Tile prefab is missing a TileData component.",
                         spawnedTile
                     );
 
                     continue;
                 }
 
+                // Generate the resources and activate the appropriate token
+                // objects on this tile.
                 tileData.GenerateResources();
+
+                // Store this tile's data at its grid position.
+                tileDataGrid[x, y] = tileData;
             }
         }
     }
-        private void SpawnPlayer(int boardHeight)
+
+    // Places the player on a randomly selected tile in the leftmost column.
+    private void SpawnPlayer(int boardHeight)
     {
         if (playerPrefab == null)
         {
@@ -106,31 +129,31 @@ public class BoardManager : MonoBehaviour
             return;
         }
 
+        // The leftmost column is x = 0. Only the y coordinate is randomized.
         int randomY = Random.Range(0, boardHeight);
 
-        Vector3 playerPosition = new Vector3(
-            .5f,
-            randomY * tileHeight + playerYPosition,
-            -.1f
-        );
+        Vector3 playerPosition = new Vector3(0f, randomY * tileHeight + playerYPosition, 0f);
 
-        spawnedPlayer = Instantiate(
-            playerPrefab,
-            playerPosition,
-            Quaternion.identity,
-            playerParent
-);
+        // Store the created player so other systems can access its Transform.
+        spawnedPlayer = Instantiate(playerPrefab, playerPosition, Quaternion.identity, playerParent);
     }
-    public Transform PlayerTransform
-    {
-        get
-        {
-            if (spawnedPlayer == null)
-            {
-                return null;
-            }
 
-            return spawnedPlayer.transform;
+    // Returns the TileData at the requested grid position.
+    // Returns null when the position is outside the board or the grid has not
+    // been initialized yet.
+    public TileData GetTileData(int x, int y)
+    {
+        if (tileDataGrid == null)
+        {
+            return null;
         }
+
+        if (x < 0 || x >= BoardWidth ||
+            y < 0 || y >= BoardHeight)
+        {
+            return null;
+        }
+
+        return tileDataGrid[x, y];
     }
 }
