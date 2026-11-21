@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Patient : Trader
+namespace WildernessGameplay
 {
-    public override TradeDecision evaluate(Trade offer) => throw new System.NotImplementedException();
-    public override Trade counterOffer(Trade offer) => throw new System.NotImplementedException();
+    // Keeps countering until a payable offer meets its minimum price or the player leaves.
+    public sealed class Patient : Trader { public override TraderMood Mood => TraderMood.Patient; }
 }

@@ -1,15 +1,22 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class Terrain : MonoBehaviour
+namespace WildernessGameplay
 {
-    public int movementCost;
-    public int waterCost;
-    public int foodCost;
-    public Vision visionType;
-
-    public int getMovementCost() => throw new System.NotImplementedException();
-    public int getWaterCost() => throw new System.NotImplementedException();
-    public int getFoodCost() => throw new System.NotImplementedException();
-    public Vision getVisionType() => throw new System.NotImplementedException();
+    // Base terrain type. Each concrete terrain chooses a vision; difficulty supplies the entry costs.
+    public abstract class Terrain
+    {
+        public int MovementCost, FoodCost, WaterCost;
+        public abstract TerrainKind Kind { get; }
+        public abstract Vision CreateVision();
+        public static Terrain Create(TerrainKind kind)
+        {
+            switch (kind)
+            {
+                case TerrainKind.Plains: return new Plains();
+                case TerrainKind.Forest: return new Forest();
+                case TerrainKind.Desert: return new Desert();
+                case TerrainKind.Swamp: return new Swamp();
+                case TerrainKind.Mountain: return new Mountain();
+                default: throw new System.ArgumentOutOfRangeException(nameof(kind));
+            }
+        }
+    }
 }

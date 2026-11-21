@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Easy : Difficulty
+namespace WildernessGameplay
 {
-    public void easyDifficulty() => throw new System.NotImplementedException();
+    // Concrete Easy difficulty; optional scene settings override the default preset.
+    public sealed class Easy : Difficulty
+    {
+        public Easy(DifficultyPreset settings = null) : base(settings ?? DifficultyPreset.Create(DifficultyLevel.Easy)) { }
+    }
 }

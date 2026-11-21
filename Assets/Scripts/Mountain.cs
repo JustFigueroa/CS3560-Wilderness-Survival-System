@@ -1,7 +1,9 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Mountain : Terrain
+namespace WildernessGameplay
 {
-    // Fields and method stubs are inherited from Terrain.
+    // Mountain terrain uses its configured entry costs and grants Focused vision.
+    public sealed class Mountain : Terrain
+    {
+        public override TerrainKind Kind => TerrainKind.Mountain;
+        public override Vision CreateVision() => new Focused();
+    }
 }

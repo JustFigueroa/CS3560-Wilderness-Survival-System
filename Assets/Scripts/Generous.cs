@@ -1,8 +1,11 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Generous : Trader
+namespace WildernessGameplay
 {
-    public override TradeDecision evaluate(Trade offer) => throw new System.NotImplementedException();
-    public override Trade counterOffer(Trade offer) => throw new System.NotImplementedException();
+    // Offers twice the normal bundle for one gold and accepts any payable positive counteroffer.
+    public sealed class Generous : Trader
+    {
+        public override TraderMood Mood => TraderMood.Generous;
+        protected override int InitialAmount(DifficultyPreset rules, System.Random random) => rules.tradeAmount * 2;
+        protected override int InitialPrice() => 1;
+        protected override int MinimumPrice => 1;
+    }
 }

@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Hard : Difficulty
+namespace WildernessGameplay
 {
-    public void hardDifficulty() => throw new System.NotImplementedException();
+    // Concrete Hard difficulty; optional scene settings override the default preset.
+    public sealed class Hard : Difficulty
+    {
+        public Hard(DifficultyPreset settings = null) : base(settings ?? DifficultyPreset.Create(DifficultyLevel.Hard)) { }
+    }
 }

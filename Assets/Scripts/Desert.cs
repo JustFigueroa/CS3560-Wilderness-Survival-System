@@ -1,7 +1,9 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Desert : Terrain
+namespace WildernessGameplay
 {
-    // Fields and method stubs are inherited from Terrain.
+    // Desert terrain uses its configured entry costs and grants FarSight vision.
+    public sealed class Desert : Terrain
+    {
+        public override TerrainKind Kind => TerrainKind.Desert;
+        public override Vision CreateVision() => new FarSight();
+    }
 }

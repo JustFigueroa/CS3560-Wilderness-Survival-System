@@ -1,15 +1,25 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class Bonus : MonoBehaviour, Item
+namespace WildernessGameplay
 {
-    public int amount;
-    public bool isRepeating;
-    public int lastCollectedTurn;
-    public bool isDepleted;
-
-    public void interact(Player player, int turn) => throw new System.NotImplementedException();
-    public bool canCollect(int turn) => throw new System.NotImplementedException();
-    public void collect(Player player, int turn) => throw new System.NotImplementedException();
-    public abstract void applyBonus(Player player);
+    // Base collectible item. Collection transfers only what fits; repeating bonuses can refill after their timer.
+    public abstract class Bonus : Item
+    {
+        public int Amount, InitialAmount;
+        public bool IsRepeating;
+        public int LastCollectedTurn = -1;
+        public bool IsDepleted => Amount == 0;
+        public bool CanCollect(int turn) => !IsDepleted;
+        public void Interact(Player player, int turn) => Collect(player, turn);
+        public void Collect(Player player, int turn)
+        {
+            if (!CanCollect(turn)) return;
+            Amount -= ApplyBonus(player);
+            LastCollectedTurn = turn;
+        }
+        protected abstract int ApplyBonus(Player player);
+        public void Respawn(int turn, int interval)
+        {
+            if (IsRepeating && LastCollectedTurn >= 0 && turn - LastCollectedTurn >= interval)
+            { Amount = InitialAmount; LastCollectedTurn = -1; }
+        }
+    }
 }

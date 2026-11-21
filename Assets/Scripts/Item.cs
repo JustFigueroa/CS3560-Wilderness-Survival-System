@@ -1,4 +1,5 @@
-public interface Item
+namespace WildernessGameplay
 {
-    void interact(Player player, int turn);
+    // A map item the player can interact with; implemented by bonuses and traders.
+    public interface Item { void Interact(Player player, int turn); }
 }

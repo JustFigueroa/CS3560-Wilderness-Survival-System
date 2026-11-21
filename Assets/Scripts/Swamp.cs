@@ -1,7 +1,9 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Swamp : Terrain
+namespace WildernessGameplay
 {
-    // Fields and method stubs are inherited from Terrain.
+    // Swamp terrain uses its configured entry costs and grants KeenEyed vision.
+    public sealed class Swamp : Terrain
+    {
+        public override TerrainKind Kind => TerrainKind.Swamp;
+        public override Vision CreateVision() => new KeenEyed();
+    }
 }

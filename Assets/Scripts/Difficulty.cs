@@ -1,21 +1,28 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class Difficulty : MonoBehaviour
+namespace WildernessGameplay
 {
-    // C# equivalent of Map<Terrain, Integer>; requires custom Inspector support.
-    [System.NonSerialized] public Dictionary<Terrain, int> terrainWeights = new Dictionary<Terrain, int>();
-    public float movementCostMultiplier;
-    public float waterCostMultiplier;
-    public float foodCostMultiplier;
-    public double foodSpawnRate;
-    public double waterSpawnRate;
-    public double goldSpawnRate;
-    public double traderSpawnRate;
-
-    public Dictionary<Terrain, int> getTerrainWeights() => throw new System.NotImplementedException();
-    public double getFoodSpawnRate() => throw new System.NotImplementedException();
-    public double getWaterSpawnRate() => throw new System.NotImplementedException();
-    public double getGoldSpawnRate() => throw new System.NotImplementedException();
-    public double getTraderSpawnRate() => throw new System.NotImplementedException();
+    // Owns one copied preset and creates terrain with difficulty-adjusted entry costs.
+    public abstract class Difficulty
+    {
+        public DifficultyPreset Settings { get; }
+        protected Difficulty(DifficultyPreset settings) { Settings = settings.Copy(); }
+        public static Difficulty Create(DifficultyPreset settings)
+        {
+            switch (settings.level)
+            {
+                case DifficultyLevel.Easy: return new Easy(settings);
+                case DifficultyLevel.Medium: return new Medium(settings);
+                case DifficultyLevel.Hard: return new Hard(settings);
+                default: throw new System.ArgumentOutOfRangeException(nameof(settings));
+            }
+        }
+        public Terrain CreateTerrain(TerrainRule rule)
+        {
+            var terrain = Terrain.Create(rule.terrain);
+            terrain.MovementCost = Cost(rule.strengthCost, Settings.movementCostMultiplier);
+            terrain.FoodCost = Cost(rule.foodCost, Settings.foodCostMultiplier);
+            terrain.WaterCost = Cost(rule.waterCost, Settings.waterCostMultiplier);
+            return terrain;
+        }
+        private static int Cost(int value, float multiplier) => (int)System.Math.Ceiling(value * (double)multiplier);
+    }
 }

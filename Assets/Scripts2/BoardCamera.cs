@@ -13,7 +13,7 @@ public class BoardCamera : MonoBehaviour
     public float boardPadding = 2f;
 
     [Header("Player Camera Settings")]
-    public float playerZoom = 6f;
+    public float playerZoom = 10.5f;
     public float zoomDuration = 2f;
     public float followSpeed = 5f;
 
@@ -42,17 +42,18 @@ public class BoardCamera : MonoBehaviour
             yield break;
         }
 
-        // Wait until BoardManager has spawned the player.
+        // Wait until BoardManager has initialized and enabled the scene player.
         yield return new WaitUntil(() => boardManager != null && boardManager.PlayerTransform != null);
 
         SetOverviewView();
 
         // Keep the full-board view visible for the configured duration.
-        yield return new WaitForSeconds(overviewDuration);
+        yield return new WaitForSecondsRealtime(Mathf.Max(0, overviewDuration));
 
         yield return ZoomToPlayer();
 
         followingPlayer = true;
+        boardManager.FinishOverview();
     }
 
     // Positions and zooms the camera so the entire board is visible.
@@ -68,7 +69,7 @@ public class BoardCamera : MonoBehaviour
 
         transform.position = new Vector3(boardCenterX, boardCenterY, transform.position.z);
 
-        float screenAspect = (float)Screen.width / Screen.height;
+        float screenAspect = cam.aspect;
 
         float requiredCameraHeight = boardWidth / screenAspect / 2f;
 
@@ -87,7 +88,7 @@ public class BoardCamera : MonoBehaviour
 
         while (elapsed < zoomDuration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
 
             float progress = Mathf.Clamp01(elapsed / zoomDuration);
 
@@ -108,6 +109,17 @@ public class BoardCamera : MonoBehaviour
 
             yield return null;
         }
+        Transform target = boardManager.PlayerTransform;
+        if (target != null)
+            transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
+        cam.orthographicSize = playerZoom;
+    }
+
+    // The scene slider changes the follow zoom; the opening overview still shows the full board.
+    public void SetZoom(float size)
+    {
+        playerZoom = Mathf.Max(1f, size);
+        if (followingPlayer && cam != null) cam.orthographicSize = playerZoom;
     }
 
     // After the initial zoom, keep the camera centered on the player.

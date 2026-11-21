@@ -1,8 +1,10 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Impatient : Trader
+namespace WildernessGameplay
 {
-    public override TradeDecision evaluate(Trade offer) => throw new System.NotImplementedException();
-    public override Trade counterOffer(Trade offer) => throw new System.NotImplementedException();
+    // Negotiates initially, but leaves if the player counters its own counteroffer.
+    public sealed class Impatient : Trader
+    {
+        public override TraderMood Mood => TraderMood.Impatient;
+        public override TradeDecision Evaluate(Trade offer, Player player, System.Random random) =>
+            !PlayerAccepted && IsCounterOffer ? TradeDecision.REJECT : base.Evaluate(offer, player, random);
+    }
 }

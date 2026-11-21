@@ -1,7 +1,13 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class WaterBonus : Bonus
+namespace WildernessGameplay
 {
-    public override void applyBonus(Player player) => throw new System.NotImplementedException();
+    // Collectible water; collection stops at the player's maximum water.
+    public sealed class WaterBonus : Bonus
+    {
+        protected override int ApplyBonus(Player player)
+        {
+            int amount = System.Math.Min(Amount, player.maxWater - player.currentWater);
+            player.currentWater += amount;
+            return amount;
+        }
+    }
 }

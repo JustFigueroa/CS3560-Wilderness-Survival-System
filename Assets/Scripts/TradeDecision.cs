@@ -1,6 +1,5 @@
-public enum TradeDecision
+namespace WildernessGameplay
 {
-    ACCEPT,
-    COUNTER,
-    REJECT
+    // A response to an offer. Reject is distinct from accepting or providing a counteroffer.
+    public enum TradeDecision { ACCEPT, COUNTER, REJECT }
 }

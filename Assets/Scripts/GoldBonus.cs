@@ -1,7 +1,13 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GoldBonus : Bonus
+namespace WildernessGameplay
 {
-    public override void applyBonus(Player player) => throw new System.NotImplementedException();
+    // Collectible gold; unlike food/water, the player has no gold capacity limit.
+    public sealed class GoldBonus : Bonus
+    {
+        protected override int ApplyBonus(Player player)
+        {
+            int amount = Amount;
+            player.currentGold += amount;
+            return amount;
+        }
+    }
 }

@@ -1,113 +1,68 @@
+using WildernessGameplay;
+using System.Collections.Generic;
 using UnityEngine;
 
-// Allows the player to inspect the TileData for the tile it occupies and the
-// four directly adjacent tiles.
+// Queries the session's terrain-based vision and authoritative grid position.
 public class PlayerTileVision : MonoBehaviour
 {
-    [Header("References")]
     public BoardManager boardManager;
+    private Game Session => GameManager.Instance?.Session;
 
-    // Grid coordinates of the tile currently occupied by the player.
-    private int currentTileX;
-    private int currentTileY;
-
-    // Finds the BoardManager, determines the player's starting tile, and
-    // reads the surrounding tiles once at startup.
-    private void Start()
-    {
-        if (boardManager == null)
-        {
-            boardManager =
-                FindObjectOfType<BoardManager>();
-        }
-
-        if (boardManager == null)
-        {
-            Debug.LogError("BoardManager was not found.");
-            return;
-        }
-
-        UpdateCurrentTilePosition();
-        ReadNearbyTiles();
-    }
-
-    // Converts the player's world position into board grid coordinates.
-    // This should be called again whenever the player moves to another tile.
+    // Refresh model vision instead of converting the offset player sprite back into grid coordinates.
     public void UpdateCurrentTilePosition()
     {
-        currentTileX = Mathf.RoundToInt(transform.position.x / boardManager.tileWidth);
-
-        currentTileY = Mathf.RoundToInt(transform.position.y / boardManager.tileHeight);
+        Session?.RefreshVision();
     }
 
-    // Reads the current tile plus the four cardinal neighboring tiles.
-    // Diagonal tiles are not included in the current implementation.
-    public void ReadNearbyTiles()
+    // Return tile views selected by the player's current terrain-based vision.
+    public List<TileData> GetVisibleTiles()
     {
-        Debug.Log("Current tile:");
-
-        ReadTile(currentTileX, currentTileY);
-
-        Debug.Log("Left tile:");
-
-        ReadTile(currentTileX - 1, currentTileY);
-
-        Debug.Log("Right tile:");
-
-        ReadTile(currentTileX + 1, currentTileY);
-
-        Debug.Log("Tile above:");
-
-        ReadTile(currentTileX, currentTileY + 1);
-
-        Debug.Log("Tile below:");
-
-        ReadTile(currentTileX, currentTileY - 1);
-    }
-
-    // Retrieves and displays one tile's stored resource information.
-    private void ReadTile(int x, int y)
-    {
-        TileData tile =
-            boardManager.GetTileData(x, y);
-
-        if (tile == null)
+        var result = new List<TileData>();
+        var s = Session;
+        if (s == null || boardManager == null)
         {
-            Debug.Log("No tile exists at position (" + x + ", " + y + ").");
-
-            return;
+            return result;
         }
 
-        Debug.Log("Tile (" + x + ", " + y + ")" + " | Available Food: " + tile.availableFoodAmount + " | Available Water: " + tile.availableWaterAmount + " | Available Gold: " + tile.availableGoldAmount + " | Food Cost: " + tile.costFoodAmount + " | Water Cost: " + tile.costWaterAmount);
+        for (int x = 0; x < s.Rules.boardWidth; x++)
+        {
+            for (int y = 0; y < s.Rules.boardHeight; y++)
+            {
+                if (s.Visible[x, y])
+                {
+                    result.Add(boardManager.GetTileData(x, y));
+                }
+            }
+        }
+
+        return result;
     }
 
-    // Returns the data for the tile currently occupied by the player.
-    public TileData GetCurrentTile()
+    // Keep the original optional tile-reading helper; automatic action logs are produced by Game.
+    public void ReadNearbyTiles()
     {
-        return boardManager.GetTileData(currentTileX, currentTileY);
+        foreach (var tile in GetVisibleTiles())
+        {
+            Debug.Log(tile.State.Terrain + " (" + tile.State.X + ", " + tile.State.Y + ") food " + tile.availableFoodAmount + ", water " + tile.availableWaterAmount);
+        }
     }
 
-    // Returns the data for the tile immediately to the player's left.
-    public TileData GetTileToLeft()
+    // Neighbor queries use the authoritative grid position and respect current visibility.
+    private TileData At(int dx, int dy)
     {
-        return boardManager.GetTileData(currentTileX - 1, currentTileY);
+        var s = Session;
+        if (s == null || boardManager == null)
+        {
+            return null;
+        }
+
+        int x = s.Player.X + dx, y = s.Player.Y + dy;
+        return s.IsInside(x, y) && s.Visible[x, y] ? boardManager.GetTileData(x, y) : null;
     }
 
-    // Returns the data for the tile immediately to the player's right.
-    public TileData GetTileToRight()
-    {
-        return boardManager.GetTileData(currentTileX + 1, currentTileY);
-    }
-
-    // Returns the data for the tile immediately above the player.
-    public TileData GetTileAbove()
-    {
-        return boardManager.GetTileData(currentTileX, currentTileY + 1);
-    }
-
-    // Returns the data for the tile immediately below the player.
-    public TileData GetTileBelow()
-    {
-        return boardManager.GetTileData(currentTileX, currentTileY - 1);
-    }
+    public TileData GetCurrentTile() => At(0, 0);
+    public TileData GetTileToLeft() => At(-1, 0);
+    public TileData GetTileToRight() => At(1, 0);
+    public TileData GetTileAbove() => At(0, 1);
+    public TileData GetTileBelow() => At(0, -1);
 }

@@ -1,7 +1,9 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class ResourceAware : Brain
+namespace WildernessGameplay
 {
-    public override Direction makeMove(Player player, Map map) => throw new System.NotImplementedException();
+    // Seeks needed supplies first, then chooses eastward progress using the same shared routes.
+    public sealed class ResourceAware : Brain
+    {
+        public override BrainMode Mode => BrainMode.ResourceAware;
+        protected override Path ChoosePath(Game game, VisiblePaths paths) => Supplies(game) ?? East(game, paths);
+    }
 }

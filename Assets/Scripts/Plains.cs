@@ -1,7 +1,9 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Plains : Terrain
+namespace WildernessGameplay
 {
-    // Fields and method stubs are inherited from Terrain.
+    // Plains terrain uses its configured entry costs and grants FarSight vision.
+    public sealed class Plains : Terrain
+    {
+        public override TerrainKind Kind => TerrainKind.Plains;
+        public override Vision CreateVision() => new FarSight();
+    }
 }

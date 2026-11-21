@@ -1,16 +1,10 @@
-using System.Collections.Generic;
-using UnityEngine;
-
-public class FarSight : Vision
+namespace WildernessGameplay
 {
-    public override List<Square> getVisibleSquares(Map map, Square playerLocation) => throw new System.NotImplementedException();
-    public override Path closestFood() => throw new System.NotImplementedException();
-    public override Path closestWater() => throw new System.NotImplementedException();
-    public override Path closestGold() => throw new System.NotImplementedException();
-    public override Path closestTrader() => throw new System.NotImplementedException();
-    public override Path secondClosestFood() => throw new System.NotImplementedException();
-    public override Path secondClosestWater() => throw new System.NotImplementedException();
-    public override Path secondClosestGold() => throw new System.NotImplementedException();
-    public override Path secondClosestTrader() => throw new System.NotImplementedException();
-    public override Path easiestPath(Map map, Player player) => throw new System.NotImplementedException();
+    // Plains/desert vision: a diamond extending four squares from the player.
+    public sealed class FarSight : Vision
+    {
+        public override VisionMode Mode => VisionMode.FarSight;
+        protected override int Radius => 4;
+        protected override bool Contains(int dx, int dy) => System.Math.Abs(dx) + System.Math.Abs(dy) <= Radius;
+    }
 }
