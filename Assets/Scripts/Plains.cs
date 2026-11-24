@@ -1,9 +1,9 @@
 namespace WildernessGameplay
 {
-    // Plains terrain uses its configured entry costs and grants FarSight vision.
+    // Plains terrain uses its configured entry costs. Open ground: no change to vision range.
     public sealed class Plains : Terrain
     {
         public override TerrainKind Kind => TerrainKind.Plains;
-        public override Vision CreateVision() => new FarSight();
+        public override int VisionModifier => 0;
     }
 }

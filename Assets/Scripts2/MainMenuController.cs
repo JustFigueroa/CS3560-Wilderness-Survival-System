@@ -36,7 +36,7 @@ public class MainMenuController : MonoBehaviour
         UpdateLabels();
     }
 
-    // Switch between the two brain strategies; terrain chooses vision automatically.
+    // Switch between the two brain strategies; vision is picked at random per game and terrain adjusts its range.
     public void BrainButtonPressed()
     {
         selectedBrain = selectedBrain == BrainMode.ResourceAware ? BrainMode.EastFirst : BrainMode.ResourceAware;

@@ -41,7 +41,10 @@ public class GameHUD : MonoBehaviour
         foodText.text = player.currentFood.ToString();
         waterText.text = player.currentWater.ToString();
         goldText.text = player.currentGold.ToString();
-        visionText.text = "Vision: " + game.CurrentVision;
+        // e.g. "Vision: KeenEyed (+2 Mountain)"; the modifier is omitted on neutral terrain.
+        int modifier = player.Vision.TerrainModifier;
+        visionText.text = "Vision: " + game.CurrentVision +
+            (modifier == 0 ? "" : " (" + (modifier > 0 ? "+" : "") + modifier + " " + game.Current.Terrain + ")");
         messageText.text = game.Message;
         bool ended = game.Phase != SessionPhase.Running;
         outcomePanel.SetActive(ended);

@@ -2,7 +2,7 @@ using System;
 
 namespace WildernessGameplay
 {
-    // Creates the difficulty, seeded map, player, brain, and game in a consistent order.
+    // Creates the difficulty, seeded map, player (with a random vision), brain, and game in a consistent order.
     public static class GameFactory
     {
         public static Game CreateSession(GameSettings settings)
@@ -17,7 +17,8 @@ namespace WildernessGameplay
                 X = 0, Y = random.Next(rules.boardHeight),
                 currentStrength = rules.startingStrength, currentFood = rules.startingFood, currentWater = rules.startingWater, currentGold = rules.startingGold,
                 maxStrength = rules.maximumStrength, maxFood = rules.maximumFood, maxWater = rules.maximumWater,
-                Brain = Brain.Create(rules.brain)
+                Brain = Brain.Create(rules.brain),
+                Vision = Vision.CreateRandom(random)
             };
             return new Game(difficulty, map, player, new Random(settings.seed ^ 0x51A7));
         }

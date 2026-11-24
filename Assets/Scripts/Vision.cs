@@ -4,12 +4,37 @@ using System.Collections.Generic;
 namespace WildernessGameplay
 {
     // Defines a visibility shape and exposes the single shared search for visible resource/trader paths.
+    // The player keeps one vision type for the whole game; terrain only adjusts its range.
     public abstract class Vision
     {
+        public const int MinimumRadius = 1;
         public abstract VisionMode Mode { get; }
-        protected abstract int Radius { get; }
+        // Range before terrain is applied.
+        public abstract int BaseRadius { get; }
+        // Set from the occupied square's terrain each time vision refreshes.
+        public int TerrainModifier { get; private set; }
+        // Effective range; never drops below the adjacent squares.
+        public int Radius => Math.Max(MinimumRadius, BaseRadius + TerrainModifier);
         protected abstract bool Contains(int dx, int dy);
         private VisiblePaths paths;
+        public void ApplyTerrain(Terrain terrain) => TerrainModifier = terrain.VisionModifier;
+        public static Vision Create(VisionMode mode)
+        {
+            switch (mode)
+            {
+                case VisionMode.KeenEyed: return new KeenEyed();
+                case VisionMode.Cautious: return new Cautious();
+                case VisionMode.Focused: return new Focused();
+                case VisionMode.FarSight: return new FarSight();
+                default: throw new ArgumentOutOfRangeException(nameof(mode));
+            }
+        }
+        // Pick one of the vision types uniformly from the game's seeded random sequence.
+        public static Vision CreateRandom(Random random)
+        {
+            var modes = (VisionMode[])Enum.GetValues(typeof(VisionMode));
+            return Create(modes[random.Next(modes.Length)]);
+        }
         // Yield only in-bounds squares inside this vision's shape.
         public IEnumerable<Square> GetVisibleSquares(Map map, Square location)
         {

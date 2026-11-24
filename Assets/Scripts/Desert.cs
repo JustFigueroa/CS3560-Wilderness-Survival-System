@@ -1,9 +1,9 @@
 namespace WildernessGameplay
 {
-    // Desert terrain uses its configured entry costs and grants FarSight vision.
+    // Desert terrain uses its configured entry costs. Open ground: no change to vision range.
     public sealed class Desert : Terrain
     {
         public override TerrainKind Kind => TerrainKind.Desert;
-        public override Vision CreateVision() => new FarSight();
+        public override int VisionModifier => 0;
     }
 }

@@ -1,11 +1,12 @@
 namespace WildernessGameplay
 {
-    // Base terrain type. Each concrete terrain chooses a vision; difficulty supplies the entry costs.
+    // Base terrain type. Each concrete terrain adjusts the player's vision range; difficulty supplies the entry costs.
     public abstract class Terrain
     {
         public int MovementCost, FoodCost, WaterCost;
         public abstract TerrainKind Kind { get; }
-        public abstract Vision CreateVision();
+        // Added to the player's base vision range while standing here (positive = see further).
+        public abstract int VisionModifier { get; }
         public static Terrain Create(TerrainKind kind)
         {
             switch (kind)

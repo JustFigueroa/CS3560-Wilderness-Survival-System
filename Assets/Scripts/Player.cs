@@ -12,8 +12,8 @@ namespace WildernessGameplay
         public Brain Brain;
         public Vision Vision;
         public Square OccupiedSquare { get; private set; }
-        // Keep the occupied square and terrain-selected vision synchronized after an action.
-        public void UpdateVision(Square square) { OccupiedSquare = square; Vision = square.TerrainType.CreateVision(); }
+        // Keep the occupied square and the terrain range modifier synchronized after an action.
+        public void UpdateVision(Square square) { OccupiedSquare = square; Vision.ApplyTerrain(square.TerrainType); }
         // Check an adjacent move against available resources. Game also guards against acting after game over.
         public bool CanMove(Square tile) => tile != null &&
             Math.Abs(tile.X - X) <= 1 && Math.Abs(tile.Y - Y) <= 1 && (tile.X != X || tile.Y != Y) &&
