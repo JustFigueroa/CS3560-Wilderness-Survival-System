@@ -76,3 +76,5 @@ Every terrain prefab uses `Tokens_1` for water, `Tokens_2` for food, and `Tokens
 Resource respawning is off. Resting and completed trades cost one food and one water; negotiating does not charge upkeep. Maximum strength is 20, and maximum food and water are 30 each.
 
 `DifficultyPreset.Create` supplies defaults, but the saved `GameManager` presets in both `MainMenu` and `Game` scenes must also be updated when changing balance. The latter supports opening the Game scene directly. The turn counter is not displayed; internal turn tracking remains for turn limits and resource timers. No-action remains a defeat. Both brains plan only through currently visible squares; the lower-level movement check validates adjacency and resources without checking visibility.
+
+Traders have no stock limits or inventory balances. Patient, Impatient, and Indecisive traders independently roll 3-6 of the more-needed supply (food or water) each encounter and initially charge two gold per resource. Generous traders still offer six for one gold. Exchanges check the player's affordability and capacity; trader inventory is not tracked.

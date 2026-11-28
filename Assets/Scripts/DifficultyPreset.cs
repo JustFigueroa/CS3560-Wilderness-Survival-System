@@ -38,6 +38,7 @@ public class DifficultyPreset
     public int actionWaterCost = 1;
     public int restStrength = 5;
     public int turnLimit = 500;
+    // Base bundle for Generous (doubled); normal traders independently roll 3-6.
     public int tradeAmount = 3;
     // Autoplay selection and terrain generation weights.
     public BrainMode brain = BrainMode.ResourceAware;

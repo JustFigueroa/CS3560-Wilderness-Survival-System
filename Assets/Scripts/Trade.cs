@@ -10,11 +10,10 @@ namespace WildernessGameplay
             RequestedFood = supply == SupplyKind.Food ? amount : 0,
             RequestedWater = supply == SupplyKind.Water ? amount : 0
         };
-        public bool CanApply(Player player, Trader trader) =>
+        public bool CanApply(Player player) =>
             OfferedGold >= 0 && OfferedFood >= 0 && OfferedWater >= 0 &&
             RequestedGold >= 0 && RequestedFood >= 0 && RequestedWater >= 0 &&
             player.currentGold >= OfferedGold && player.currentFood >= OfferedFood && player.currentWater >= OfferedWater &&
-            trader.Gold >= RequestedGold && trader.Food >= RequestedFood && trader.Water >= RequestedWater &&
             player.currentFood - OfferedFood + RequestedFood <= player.maxFood &&
             player.currentWater - OfferedWater + RequestedWater <= player.maxWater;
     }

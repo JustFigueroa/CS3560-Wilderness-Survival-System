@@ -50,7 +50,7 @@ namespace WildernessGameplay
                     if (tile.Food > 0) Remember(path, ref ClosestFood, ref SecondClosestFood);
                     if (tile.Water > 0) Remember(path, ref ClosestWater, ref SecondClosestWater);
                     if (tile.Gold > 0) Remember(path, ref ClosestGold, ref SecondClosestGold);
-                    if (tile.Trader != null && (tile.Trader.Food > 0 || tile.Trader.Water > 0))
+                    if (tile.Trader != null)
                         Remember(path, ref ClosestTrader, ref SecondClosestTrader);
                 }
             }

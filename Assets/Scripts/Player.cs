@@ -60,16 +60,13 @@ namespace WildernessGameplay
             bool fair = trader.CounterPrice <= trader.OfferAmount;
             return affordable && (fair || trader.Negotiations > 0) ? TradeDecision.ACCEPT : TradeDecision.COUNTER;
         }
-        // Validate before transferring resources so neither participant is changed by an invalid deal.
-        public bool ApplyTrade(Trade offer, Trader trader)
+        // Validate player affordability and capacity before applying an exchange; traders have unlimited supplies.
+        public bool ApplyTrade(Trade offer)
         {
-            if (!offer.CanApply(this, trader)) return false;
+            if (!offer.CanApply(this)) return false;
             currentGold += offer.RequestedGold - offer.OfferedGold;
-            trader.Gold += offer.OfferedGold - offer.RequestedGold;
             currentFood += offer.RequestedFood - offer.OfferedFood;
-            trader.Food += offer.OfferedFood - offer.RequestedFood;
             currentWater += offer.RequestedWater - offer.OfferedWater;
-            trader.Water += offer.OfferedWater - offer.RequestedWater;
             return true;
         }
     }

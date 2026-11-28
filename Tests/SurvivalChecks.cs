@@ -57,6 +57,31 @@ class SurvivalChecks {
    int foodBeforeLeave=encounter.Player.currentFood;
    Check(encounter.PlayTurn() && encounter.Message=="Player leaves." && encounter.Player.X==1 && encounter.Player.currentFood==foodBeforeLeave, "next leaves without upkeep");
   }
+  foreach(TraderMood mood in Enum.GetValues(typeof(TraderMood))) {
+   foreach(SupplyKind supply in Enum.GetValues(typeof(SupplyKind))) {
+    var unlimited=New();var seller=Trader.Create(mood);var rolls=new Random(123);
+    var amounts=new System.Collections.Generic.HashSet<int>();int purchased=0;
+    for(int encounter=0;encounter<40;encounter++) {
+     unlimited.Player.currentFood=supply==SupplyKind.Food?5:20;
+     unlimited.Player.currentWater=supply==SupplyKind.Water?5:20;
+     unlimited.Player.currentGold=100;
+     seller.PresentOffer(unlimited.Player,unlimited.Rules,rolls);
+     Check(seller.OfferPending && seller.CounterSupply==supply,"repeat encounters offer the needed supply without stock limits");
+     Check(mood==TraderMood.Generous ? seller.OfferAmount==6 && seller.CounterPrice==1 :
+      seller.OfferAmount>=3 && seller.OfferAmount<=6 && seller.CounterPrice==seller.OfferAmount*2,"food and water offer ranges and prices");
+     amounts.Add(seller.OfferAmount);
+     Check(unlimited.Player.ApplyTrade(Trade.Purchase(supply,seller.OfferAmount,seller.CounterPrice)),"repeat exchange is not limited by trader inventory");
+     Check((supply==SupplyKind.Food?unlimited.Player.currentFood:unlimited.Player.currentWater)==5+seller.OfferAmount && unlimited.Player.currentGold==100-seller.CounterPrice,"unlimited trader exchange still updates player resources correctly");
+     purchased+=seller.OfferAmount;
+    }
+    Check(purchased>12,"repeated purchases exceed the former stock cap");
+    if(mood!=TraderMood.Generous)Check(amounts.Count==4,"each normal supply uses fresh random rolls covering 3 through 6");
+   }
+  }
+  var limitedBuyer=New().Player;limitedBuyer.currentGold=0;
+  Check(!limitedBuyer.ApplyTrade(Trade.Purchase(SupplyKind.Food,3,1)),"unlimited stock does not bypass player affordability");
+  limitedBuyer.currentGold=10;limitedBuyer.currentFood=limitedBuyer.maxFood;
+  Check(!limitedBuyer.ApplyTrade(Trade.Purchase(SupplyKind.Food,3,1)),"unlimited stock does not bypass player capacity");
   var generous=New();generous.Player.currentFood=3;generous.Player.currentWater=20;
   generous.Tiles[1,generous.Player.Y].Trader=MakeTrader(mood:TraderMood.Generous);generous.Move(1,generous.Player.Y);
   generous.AdvanceTrader();

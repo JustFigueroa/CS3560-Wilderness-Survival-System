@@ -186,7 +186,7 @@ namespace WildernessGameplay
             usedGold = price;
             if (supply == SupplyKind.Food) gainedFood = amount;
             else gainedWater = amount;
-            if (!Player.ApplyTrade(WildernessGameplay.Trade.Purchase(supply, amount, price), trader))
+            if (!Player.ApplyTrade(WildernessGameplay.Trade.Purchase(supply, amount, price)))
                 throw new InvalidOperationException("An accepted trade must be affordable and fit inventory.");
 
             trader.CounterPrice = 0;
